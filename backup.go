@@ -92,7 +92,7 @@ func syncSnapshot(pool string, newPool string, lastSnapshot Snapshot, snapshot S
 	var err error
 	var sendCmd *exec.Cmd
 	if incremental {
-		sendCmd = exec.Command("zfs", "send", "-I", "-R", pool+"@"+lastSnapshot.Name, pool+"@"+snapshot.Name)
+		sendCmd = exec.Command("zfs", "send", "-R", "-I", pool+"@"+lastSnapshot.Name, pool+"@"+snapshot.Name)
 	} else {
 		sendCmd = exec.Command("zfs", "send", "-R", pool+"@"+snapshot.Name)
 	}
