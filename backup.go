@@ -382,3 +382,41 @@ func DeleteSnapshot(name string) error {
 	fmt.Println("Deleted snapshot!")
 	return nil
 }
+
+func RemoveSnapshotsFromAllPools(name string) error {
+	output, err := ExecuteCommand(false, "zfs", "list", "-t", "snapshot", "-o", "name")
+	if err != nil {
+		return err
+	}
+	lines := strings.Split(output, "\n")
+	var snapshots []string
+	for _, line := range lines {
+		snapshotName := strings.Split(line, "@")[1]
+		if snapshotName == name {
+			snapshots = append(snapshots, line)
+		}
+	}
+	if len(snapshots) == 0 {
+		return fmt.Errorf("snapshot %s does not exist", name)
+	}
+	fmt.Println("Snapshots to delete: ", strings.Join(snapshots, ", "))
+	fmt.Print("Are you sure? (y/N) ")
+	reader := bufio.NewReader(os.Stdin)
+	answer, err := reader.ReadString('\n')
+	if err != nil {
+		return err
+	}
+	answer = strings.ToLower(strings.TrimSpace(answer))
+	if answer != "y" && answer != "yes" {
+		fmt.Println("Canceled delete process!")
+		return nil
+	}
+	for _, snapshot := range snapshots {
+		err := deleteSnapshot(strings.Split(snapshot, "@")[0], strings.Split(snapshot, "@")[1])
+		if err != nil {
+			return err
+		}
+	}
+	fmt.Println("Deleted all snapshots with the name " + name + "!")
+	return nil
+}

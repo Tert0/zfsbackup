@@ -7,7 +7,7 @@ import (
 
 func main() {
 	if len(os.Args) <= 1 {
-		fmt.Println("Usage:", os.Args[0], "[create|remove|list|restore-backup|restore-snapshot|sync]")
+		fmt.Println("Usage:", os.Args[0], "[create|remove|list|restore-backup|restore-snapshot|sync|remove-snapshots]")
 		os.Exit(1)
 	}
 
@@ -56,6 +56,15 @@ func main() {
 		}
 	case "sync":
 		SyncPools(config)
+	case "remove-snapshots":
+		if len(os.Args) <= 2 {
+			fmt.Println("Please provide a snapshot name")
+			os.Exit(1)
+		}
+		err := RemoveSnapshotsFromAllPools(os.Args[2])
+		if err != nil {
+			panic(err)
+		}
 
 	default:
 		fmt.Println("Unknown command")
