@@ -4,9 +4,9 @@ Little Backup Tool for ZFS Pools
 ## Installation with curl
 (needs write permissions to /usr/bin)
 ```bash
-curl -L https://github.com/Tert0/zfsbackup/releases/download/v0.8/create-backup.sh -o /usr/bin/create-backup
+curl -L https://github.com/Tert0/zfsbackup/releases/download/v0.8.3/create-backup.sh -o /usr/bin/create-backup
 chmod +x /usr/bin/create-backup
-curl -L https://github.com/Tert0/zfsbackup/releases/download/v0.8/linux-amd64-zfsbackup -o /usr/bin/zfsbackup
+curl -L https://github.com/Tert0/zfsbackup/releases/download/v0.8.3/linux-amd64-zfsbackup -o /usr/bin/zfsbackup
 chmod +x /usr/bin/zfsbackup
 ```
 
