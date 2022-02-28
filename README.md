@@ -1,6 +1,22 @@
 # ZFSBackup
 Little Backup Tool for ZFS Pools
 
+## Installation with curl
+(needs write permissions to /usr/bin)
+```bash
+curl -L https://github.com/Tert0/zfsbackup/releases/download/v0.8/create-backup.sh -o /usr/bin/create-backup
+chmod +x /usr/bin/create-backup
+curl -L https://github.com/Tert0/zfsbackup/releases/download/v0.8/linux-amd64-zfsbackup -o /usr/bin/zfsbackup
+chmod +x /usr/bin/zfsbackup
+```
+
+## Uninstall
+(needs write permissions to /usr/bin)
+```bash
+rm -rf /usr/bin/create-backup
+rm -rf /usr/bin/zfsbackup
+```
+
 ## Configuration
 The config file is located at `~/.config/zfsbackup/config.json`.
 Example Config:
@@ -49,6 +65,19 @@ This will roll back the main pool to the snapshot.
 ./zfsbackup sync
 ```
 This will sync all snapshots to the backup pool.
+
+## Create Backup with Script
+```bash
+./create-backup.sh <path to executable>
+```
+### Create without Tag automatically
+```bash
+echo "" | ./create-backup.sh <path to executable>
+```
+### Create with Tag automatically
+```bash
+echo "<tag-name>" | ./create-backup.sh <path to executable>
+```
 
 ## License
 This project is licensed under the MIT License.
