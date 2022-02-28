@@ -26,7 +26,14 @@ func main() {
 			panic(err)
 		}
 	case "remove":
-		panic("Not implemented")
+		if len(os.Args) <= 2 {
+			fmt.Println("Please provide a pool and snapshot. Example: pool@snapshot")
+			os.Exit(1)
+		}
+		err := DeleteSnapshot(os.Args[2])
+		if err != nil {
+			panic(err)
+		}
 	case "list":
 		ListSnapshots(config)
 	case "restore-backup":

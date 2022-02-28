@@ -349,3 +349,33 @@ func RestoreSnapshot(config Config, name string) error {
 	fmt.Println("Restored snapshot", config.ZFSPool+"@"+name, "to", config.ZFSPool)
 	return nil
 }
+
+func DeleteSnapshot(name string) error {
+	pool := strings.Split(name, "@")[0]
+	snapshotName := strings.Split(name, "@")[1]
+	snapshots := GetAllSnapshots(pool, false)
+	if !snapshotsContainName(snapshots, snapshotName) {
+		return fmt.Errorf("snapshot %s@%s does not exist", pool, snapshotName)
+	}
+	snapshot := getSnapshotByName(snapshots, snapshotName)
+	if snapshot.Name == "" {
+		return fmt.Errorf("snapshot %s@%s does not exist", pool, snapshotName)
+	}
+	fmt.Print("THIS WILL DELETE THE SNAPSHOT \"" + snapshot.Name + "\"! Are you sure? (y/N) ")
+	reader := bufio.NewReader(os.Stdin)
+	answer, err := reader.ReadString('\n')
+	if err != nil {
+		return err
+	}
+	answer = strings.ToLower(strings.TrimSpace(answer))
+	if answer != "y" && answer != "yes" {
+		fmt.Println("Canceled delete process!")
+		return nil
+	}
+	err = deleteSnapshot(pool, snapshotName)
+	if err != nil {
+		return err
+	}
+	fmt.Println("Deleted snapshot!")
+	return nil
+}

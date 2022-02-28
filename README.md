@@ -1,7 +1,7 @@
 # ZFSBackup
 Little Backup Tool for ZFS Pools
 
-# Configuration
+## Configuration
 The config file is located at `~/.config/zfsbackup/config.json`.
 Example Config:
 ```json
@@ -17,7 +17,10 @@ Example Config:
 ```
 This will create the snapshot and sync it to the backup pool.
 ### Delete a Backup
-TODO Implement
+```bash
+./zfsbackup remove <pool>@<snapshot>
+```
+Same as `zfs destroy <pool>@<snapshot>`.
 ### List Backups
 ```bash
 ./zfsbackup list
@@ -46,3 +49,6 @@ This will roll back the main pool to the snapshot.
 ./zfsbackup sync
 ```
 This will sync all snapshots to the backup pool.
+
+## License
+This project is licensed under the MIT License.
