@@ -384,13 +384,16 @@ func DeleteSnapshot(name string) error {
 }
 
 func RemoveSnapshotsFromAllPools(name string) error {
-	output, err := ExecuteCommand(false, "zfs", "list", "-t", "snapshot", "-o", "name")
+	output, err := ExecuteCommand(false, "zfs", "list", "-t", "snapshot", "-o", "name", "-H")
 	if err != nil {
 		return err
 	}
 	lines := strings.Split(output, "\n")
 	var snapshots []string
 	for _, line := range lines {
+		if line == "" {
+			continue
+		}
 		snapshotName := strings.Split(line, "@")[1]
 		if snapshotName == name {
 			snapshots = append(snapshots, line)
