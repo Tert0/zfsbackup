@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RemoteTargetsManager">
+    <targets>
+      <target name="mik@server:22" type="ssh/sftp" uuid="557303a6-507a-42f0-9d3a-cf7fbd6b7d45">
+        <config>
+          <option name="projectRootOnTarget" value="$PROJECT_DIR$/../../../../mik/ZFSBackup" />
+          <option name="serverName" value="root@server:22 agent" />
+          <option name="useRsync" value="true" />
+        </config>
+        <ContributedStateBase type="GoLanguageRuntime">
+          <config>
+            <option name="goPath" value="$PROJECT_DIR$/../../../../mik/go" />
+            <option name="goRoot" value="/usr/bin/go" />
+            <option name="goVersion" value="go1.15.15 linux/amd64" />
+          </config>
+        </ContributedStateBase>
+      </target>
+      <target name="root@testserver:22" type="ssh/sftp" uuid="2fd730f6-e111-4305-9d66-f75242cdfba8">
+        <config>
+          <option name="projectRootOnTarget" value="/root/ZFSBackup" />
+          <option name="serverName" value="root@testserver:22 password" />
+          <option name="useRsync" value="true" />
+        </config>
+        <ContributedStateBase type="GoLanguageRuntime">
+          <config />
+        </ContributedStateBase>
+      </target>
+    </targets>
+  </component>
+</project>
