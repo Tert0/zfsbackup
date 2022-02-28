@@ -92,7 +92,7 @@ func syncSnapshot(pool string, newPool string, lastSnapshot Snapshot, snapshot S
 	var err error
 	var sendCmd *exec.Cmd
 	if incremental {
-		sendCmd = exec.Command("zfs", "send", "-I", pool+"@"+lastSnapshot.Name, pool+"@"+snapshot.Name)
+		sendCmd = exec.Command("zfs", "send", "-I", "-R", pool+"@"+lastSnapshot.Name, pool+"@"+snapshot.Name)
 	} else {
 		sendCmd = exec.Command("zfs", "send", pool+"@"+snapshot.Name)
 	}
@@ -186,7 +186,7 @@ func syncPools(config Config) {
 }
 
 func createSnapshot(config Config, name string) error {
-	_, err := ExecuteCommand(false, "zfs", "snapshot", config.ZFSPool+"@"+name)
+	_, err := ExecuteCommand(false, "zfs", "snapshot", "-r", config.ZFSPool+"@"+name)
 	if err == nil {
 		fmt.Println("Snapshot Created:", name)
 	}
