@@ -114,18 +114,24 @@ func syncSnapshot(pool string, newPool string, lastSnapshot Snapshot, snapshot S
 		return err
 	}
 	dataWrote := 0
-	buffer := make([]byte, 1024*1024*16)
+	buffer := make([]byte, 1024*512) // 512KB Buffer
+	syncing := true
+
+	go func() {
+		for syncing {
+			fmt.Print("\r")
+			fmt.Printf("Wrote %.1f MB", float64(dataWrote)/1024.0/1024.0)
+			time.Sleep(time.Millisecond * 50)
+		}
+	}()
 	for {
 		read, err := sendCmdStdout.Read(buffer)
-		if err == io.EOF {
+		if err == io.EOF || read == 0 {
 			break
 		}
 		if err != nil {
 			fmt.Println("read error")
 			return err
-		}
-		if read == 0 {
-			break
 		}
 		write, err := recvStdin.Write(buffer[:read])
 		if err != nil {
@@ -136,12 +142,8 @@ func syncSnapshot(pool string, newPool string, lastSnapshot Snapshot, snapshot S
 			return fmt.Errorf("read %d bytes, wrote %d bytes", read, write)
 		}
 		dataWrote += read
-
-		func() {
-			fmt.Print("\r")
-			fmt.Printf("Wrote %.2f MB", float64(dataWrote)/1024.0/1024.0)
-		}()
 	}
+	syncing = false
 	fmt.Println("")
 	err = recvCmd.Wait()
 	if err != nil {
@@ -230,6 +232,7 @@ func mergeSnapshotLists(snapshots1 []Snapshot, snapshots2 []Snapshot) []Snapshot
 }
 
 func ListSnapshots(config Config) {
+	// TODO: sort by date
 	type SnapshotEntry struct {
 		Snapshot
 		Pool       bool
